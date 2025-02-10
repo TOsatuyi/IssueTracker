@@ -1,0 +1,49 @@
+﻿@model RegisterViewModel
+
+<div class="container d-flex justify-content-center align-items-center" style=" min-height: 88vh;">
+	<div class= "col-md-4">
+		<form asp-action="Register" method="post" class=" p-4 border rounded shadow-sm bg-light">
+			<h3 class=" text-center mb-4">Register</h3>
+
+			@if (!ViewData.ModelState.IsValid)
+			{
+				<div class="alert alert-danger">
+					@foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+					{
+						<p>@error.ErrorMessage</p>
+					}
+				</div>
+			}
+
+			@* Validation Summary *@
+			<div asp-validation-summary="ModelOnly" class=" text-danger mb-3"></div>
+
+			<div class="form-group mb-3">
+				<label asp-for = "Email" class="form-label">Email</label>
+				<input asp-for = "Email" class="form-control" placeholder="Enter your mail"/>
+				@* Error message for Email *@
+				<span asp-validation-for="Email" class=" text-danger"></span>
+			</div>
+			<div class=" form-group mb-3">
+				<label asp-for = "Password" class="form-label">Password</label>
+				<input asp-for = "Password" type ="password" class="form-control" placeholder="Enter your Password" />
+				@* Error Message for Password *@
+				<span asp-validation-for = "Password" class="text-danger"></span>
+			</div>
+			<div class=" form-group mb-3">
+				<label asp-for="ConfirmPassword" class="form-label">Confirm Password</label>
+				<input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm your Password" />
+				@* Error message for ConfirmPassword *@
+				<span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+			</div>
+
+			<button type = "submit" class="btn btn-primary w-100 mb-3">Register</button>
+			<div class="text-center">
+				<small>
+					Already have an account?
+					<a asp-action = "Login" class="text-decoration-none">Login here</a>
+				</small>
+			</div>
+		</form>
+	</div>
+</div>

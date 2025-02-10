@@ -1,0 +1,38 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@{
+    ViewData["Title"] = "Home Page";
+    var user = User;
+    var isAdmin = user.IsInRole("Admin");
+    var isDev = user.IsInRole("Developer");
+    var isTester = user.IsInRole("Tester");
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <a asp-controller = "Home" asp-action ="Issues" class= " btn btn-primary">View All Issues</a>
+    @* <a asp-controller="Home" asp-action="UserDashboard" class=" btn btn-secondary">Add new</a> *@
+    @if (SignInManager.IsSignedIn(User))
+    {
+        if (isAdmin)
+        {
+            <a asp-controller="Home" asp-action="ManageApplications" class="btn btn-secondary">Manage Applications</a>
+            <a asp-controller="Admin" asp-action="AssignRole" class="btn btn-secondary">Manage User Roles</a> 
+        }
+        else if (isDev)
+        {
+            <a asp-controller="Home" asp-action="DeveloperDashboard" class="btn btn-secondary">View Assigned Issues</a>
+        }
+        else if (isTester)
+        {
+            <a asp-controller="Home" asp-action="TesterDashboard" class="btn btn-secondary">View Assigned Issues</a>
+        }
+        else
+        {
+            <a asp-controller="Home" asp-action="UserDashboard" class="btn btn-secondary">Add new</a>
+        }
+    }
+
+</div>

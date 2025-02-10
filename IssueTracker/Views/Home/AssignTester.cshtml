@@ -1,0 +1,23 @@
+﻿@model IssueTracker.Models.AssignTesterViewModel
+
+@{
+    ViewData["Title"] = "AssignTester";
+}
+
+<h1>Assign Tester</h1>
+
+<form method="post" asp-action="AssignTester" asp-controller="Home">
+    <input type="hidden" asp-for="IssueId" />
+    <div class="form-group">
+        <label asp-for="SelectedTesterId">Select Tester:</label>
+        <select asp-for="SelectedTesterId" class="form-control">
+            <option value="">-- Select Tester --</option>
+            @foreach (var tester in Model.Testers)
+            {
+                <option value="@tester.Value">@tester.Text</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Assign Tester</button>
+</form>

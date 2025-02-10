@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Create / Edit";
+}
+
+@model IssueTracker.Models.Issue
+
+<div class="text-center">
+    <h1 class="display-4">Create or Edit an Issue Today</h1>
+</div>
+
+<form asp-action ="CreateEditIssueForm" asp-controller = "Home">
+    @* <label>Id</label> *@
+    <input hidden class=" form-control" type = "number" placeholder="0" asp-for = "Id" />
+    @* <label class=" mt-4">AppName</label> *@
+    @* <input class=" form-control" type="text" placeholder="Please Enter App Name" asp-for="AppName" /> *@
+    <label class=" mt-4">Description</label>
+    <input class=" form-control" type="text" placeholder="Please Enter Issue" asp-for="Description" />
+    @* <label class=" mt-4">Severity</label> *@
+    @* <input class=" form-control" type="text" placeholder="Low" asp-for="Severity" /> *@
+    @* <label class=" mt-4">Status</label> *@
+    @* <input class=" form-control" type="text" placeholder="Active" asp-for="Status" /> *@
+    <button class = "btn btn-primary mt-4" type = "submit">Ok</button>
+</form>

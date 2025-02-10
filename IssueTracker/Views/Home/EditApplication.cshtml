@@ -1,0 +1,16 @@
+﻿@model IssueTracker.Models.Application
+
+@{
+    ViewData["Title"] = "EditApplication";
+}
+
+<h1>EditApplication</h1>
+
+<form method="post" asp-action="EditApplication">
+    <div class="form-group">
+        <label for="Name">Application Name</label>
+        <input type="text" id="Name" name="Name" class="form-control" value="@Model.Name" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Update Application</button>
+</form>

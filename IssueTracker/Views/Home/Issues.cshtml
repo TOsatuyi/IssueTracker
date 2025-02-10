@@ -1,0 +1,91 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = "Issues";
+}
+@{
+    var user = HttpContextAccessor.HttpContext.User;
+    var isAdmin = user.IsInRole("Admin");
+}
+
+@model List<Issue>
+
+<div class="text-center">
+    <h1 class="display-4">Issues</h1>
+    <br />
+    <table class=" table">
+        <thead>
+            <tr>
+                <th>
+                    Application Name
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Date
+                </th>
+                <th>
+                    Severity
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>
+                    Actions
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                foreach (var issue in Model)
+                {
+                    <tr>
+                    
+                        <td>
+                            @issue.Application?.Name
+                        </td>
+                        <td>
+                            @issue.Description
+                        </td>
+                        <td>
+                            @issue.Created
+                        </td>
+                        <td>
+                            @issue.Severity
+                        </td>
+                        <td>
+                            @issue.Status
+                        </td>
+                        <td>
+                        @if (isAdmin)
+                        {
+                            <a asp-action = "EditIssue" asp-route-id = "@issue.Id">Edit</a>
+                            // <a href="javascript:void(0);" onclick="confirmDelete(@issue.Id)">Delete</a>
+
+                            // <a asp-action = "DeleteIssue" asp-route-id = "@issue.Id">Delete</a>
+
+
+                            // @if (issue.DeveloperId == null && issue.Tester.Id == null)
+                                @if (issue.DeveloperId == null && issue.TesterId == null  && issue.Status != "Fixed")
+
+                            {
+                                    <a href="@Url.Action("AssignDeveloper", "Home", new { id = issue.Id })" class="btn btn-primary">Assign Issue</a>
+                            }
+                                else
+                                {
+                                    <span class="text-muted">Issue already assigned</span>
+                                }
+                        }
+                        </td>
+                    
+                    </tr>
+                }
+            }
+
+        </tbody>
+
+    </table>
+</div>
+
+

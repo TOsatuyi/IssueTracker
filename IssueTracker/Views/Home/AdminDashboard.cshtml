@@ -1,0 +1,60 @@
+﻿@model IEnumerable<IssueTracker.Models.Issue>
+
+@{
+    ViewData["Title"] = "AdminDashboard";
+}
+
+<h1>Admin Dashboard</h1>
+
+@if (!Model.Any())
+{
+    <p>No issues available at the moment.</p>
+}
+
+<table class="table table-striped table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Developer</th>
+            <th>Tester</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var issue in Model)
+        {
+            <tr>
+                <td>@issue.Id</td>
+                <td>@issue.Description</td>
+                <td>@issue.Status</td>
+                <td>@issue.Developer?.UserName</td>
+                <td>@issue.Tester?.UserName</td>
+                <td>
+                    @if (!issue.DeveloperAssigned)
+                    {
+                        <a href="@Url.Action("AssignDeveloper", "Home", new { id = issue.Id })" class="btn btn-primary">Assign Dev</a>
+                    }
+                    @if (issue.Status == "Ready for Testing" && !issue.TesterAssigned)
+                    {
+                        <a href="@Url.Action("AssignTester", "Home", new { id = issue.Id })" class="btn btn-primary">Assign Tester</a>
+                    }
+                    @if (issue.Status == "Fixed")
+                    {
+                        <form method="post" asp-action="DeleteIssue" asp-controller="Home" style="display:inline;" onsubmit="return confirmDelete();">
+                            <input type="hidden" name="id" value="@issue.Id" />
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+        <script>
+            function confirmDelete() {
+                return confirm("Are you sure you want to delete this issue? This action cannot be undone.");
+            }
+        </script>
+
+    </tbody>
+</table>

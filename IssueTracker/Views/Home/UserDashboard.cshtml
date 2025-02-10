@@ -1,0 +1,28 @@
+﻿@model IssueTracker.Models.Issue
+@{
+    ViewData["Title"] = "UserDashboard";
+}
+
+<h2>User Dashboard</h2>
+
+<form method="post" asp-action="CreateEditIssue">
+    <div class="form-group">
+        <label for="ApplicationId">Select Application</label>
+        <select id="ApplicationId" name="ApplicationId" class="form-control">
+            @foreach (var app in (SelectList)ViewBag.Applications)
+            {
+                <option value="@app.Value">@app.Text</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="Description">Issue Description</label>
+        <textarea id="Description" name="Description" class="form-control" rows="5" required></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-4">Submit Issue</button>
+</form>
+
+
+

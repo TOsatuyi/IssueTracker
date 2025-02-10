@@ -1,0 +1,29 @@
+﻿@model IEnumerable<IssueTracker.Models.Application>
+@{
+    ViewData["Title"] = "ManageApplications";
+}
+
+<h1>ManageApplications</h1>
+
+<a href="@Url.Action("AddApplication", "Home")" class="btn btn-primary">Add Application</a>
+
+<table class="table mt-3">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var app in Model)
+        {
+            <tr>
+                <td>@app.Name</td>
+                <td>
+                    <a href="@Url.Action("EditApplication", "Home", new { id = app.Id })" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="@Url.Action("DeleteApplication", "Home", new { id = app.Id })" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

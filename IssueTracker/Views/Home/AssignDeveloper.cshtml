@@ -1,0 +1,23 @@
+﻿@model AssignDeveloperViewModel
+
+@{
+    ViewData["Title"] = "AssignDeveloper";
+}
+
+<h1>Assign Developer</h1>
+
+<form method="post" asp-action="AssignDeveloper" asp-controller="Home">
+    <input type="hidden" asp-for="IssueId" />
+    <div class="form-group">
+        <label asp-for="SelectedDeveloperId">Select Developer:</label>
+        <select asp-for="SelectedDeveloperId" class="form-control">
+            <option value="">-- Select Developer --</option>
+            @foreach (var developer in Model.Developers)
+            {
+                <option value="@developer.Value">@developer.Text</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Assign Developer</button>
+</form>

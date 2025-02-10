@@ -1,0 +1,30 @@
+﻿@model IssueTracker.Models.Issue
+
+@{
+    ViewData["Title"] = "UpdateIssueStatus";
+}
+
+
+<h1>Issue Details</h1>
+
+<div>
+    <strong>Description:</strong> @Model.Description
+</div>
+<div>
+    <strong>Status:</strong> @Model.Status
+</div>
+
+@if (User.IsInRole("Developer") && !Model.TesterAssigned)
+{
+    <h2>Developer's Actions</h2>
+    <form method="post" asp-action="UpdateIssueStatus" asp-route-id="@Model.Id">
+        <div class="form-group">
+            <label for="Status">Update Status:</label>
+            <select id="Status" name="Status" class="form-control">
+                <option value="In Progress">In Progress</option>
+                <option value="Done">Done</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Status</button>
+    </form>
+}

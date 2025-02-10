@@ -1,0 +1,60 @@
+﻿@model IssueTracker.Models.Issue
+
+@{
+    ViewData["Title"] = "ViewIssue";
+}
+@* @{ *@
+@*     var userRole = User.IsInRole("Developer") ? "Developer" : User.IsInRole("Tester") ? "Tester" : "None"; *@
+@* } *@
+
+
+<h1>Issue Details</h1>
+
+<div>
+    <strong>Application:</strong> @Model.Application.Name
+</div>
+<div>
+    <strong>Description:</strong> @Model.Description
+</div>
+<div>
+    <strong>Severity:</strong> @Model.Severity
+</div>
+<div>
+    <strong>Status:</strong> @Model.Status
+</div>
+<div>
+    <strong>Created:</strong> @Model.Created
+</div>
+
+
+
+<h2>Comments</h2>
+
+@if (Model.Comments.Any())
+{
+    <ul>
+        @foreach (var comment in Model.Comments)
+        {
+            <li>
+                <strong>@comment.User.UserName:</strong> @comment.Text <br />
+                <small>Posted on: @comment.CreatedAt</small>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>No comments yet.</p>
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    <form method="post" asp-controller="Home" asp-action="AddComment">
+        <input type="hidden" name="issueId" value="@Model.Id" />
+        <textarea name="text" class="form-control" placeholder="Add a comment..." required></textarea>
+        <button type="submit" class="btn btn-primary mt-2">Post Comment</button>
+    </form>
+}
+
+
+
