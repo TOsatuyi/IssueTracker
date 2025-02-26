@@ -19,6 +19,11 @@ namespace IssueTracker.Models
 
         [Required]
         public DateTime Created { get; set; } = DateTime.Now;
+        public DateTime? AssignedToDeveloperDate { get; set; }
+        public DateTime? ReadyForTestingDate { get; set; }
+        public DateTime? AssignedToTesterDate { get; set; }
+        public DateTime? FixedDate { get; set; }
+        public DateTime? ReopenedDate { get; set; }
 
         public string? Severity { get; set; }
         public string? Status { get; set; }

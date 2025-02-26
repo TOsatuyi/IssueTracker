@@ -14,12 +14,12 @@
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">IssueTracker</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     @* <ul class="navbar-nav flex-grow-1"> *@
-                                         
+
                     @* </ul> *@
                     <ul class=" navbar-nav flex-grow-1">
                         @if (User.Identity.IsAuthenticated)
@@ -27,8 +27,19 @@
                             if(User.IsInRole("Admin"))
                             {
                                 <li class="nav-item">
-                                    <a class=" nav-link text-dark text-decoration-underline" asp-area="" asp-controller="Home" asp-action="AdminDashboard">AdminDashboard</a>
+                                    <a class=" nav-link active text-dark" asp-area="" asp-controller="Home" asp-action="AdminDashboard">AdminDashboard</a>
                                 </li>
+                                @if (!(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" &&
+                                                  ViewContext.RouteData.Values["action"]?.ToString() == "Index"))
+                                {
+                                    
+                                    <li class="nav-item">
+                                        <a class=" nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ManageApplications">Applications</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class=" nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="AssignRole">User Roles</a>
+                                    </li>
+                                }
                             } else if(User.IsInRole("User")) {
                                 <li class = "nav-item">
                                     <a class = "nav-link text-dark" asp-area="" asp-controller="Home" asp-action = "UserDashboard">User</a>
@@ -37,18 +48,18 @@
                               else if (User.IsInRole("Developer"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="DeveloperDashboard">Dev</a>
+                                    <a class="nav-link text-dark text-decoration-underline" asp-area="" asp-controller="Home" asp-action="DeveloperDashboard">My Issues</a>
                                 </li>
                             }
                               else if (User.IsInRole("Tester"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="TesterDashboard">Tester</a>
+                                    <a class="nav-link text-dark text-decoration-underline" asp-area="" asp-controller="Home" asp-action="TesterDashboard">My Issues</a>
                                 </li>
                             }
 
                             <li class = "nav-item ms-lg-auto d-flex align-items-center">
-                                <form asp-controller="Account" asp-action="Logout" method="post" class=" m-0 p-0">
+                                <form asp-controller="Account" asp-action="Logout" method="post" class="m-0 p-0">
                                     <button type = "submit" class=" btn btn-link nav-link text-dark p-0">Logout</button>
                                 </form>
                             </li>
@@ -71,7 +82,6 @@
                                 <a class= "nav-link text-dark" asp-controller="Account" asp-action="Register">Register</a>
                             </li>
                         }
-
                     </ul>
                 </div>
             </div>

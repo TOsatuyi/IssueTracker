@@ -4,6 +4,7 @@ using IssueTracker.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IssueTracker.Migrations
 {
     [DbContext(typeof(IssuesDbContext))]
-    partial class IssuesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250225110520_AddIssueTimestamps")]
+    partial class AddIssueTimestamps
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,12 +84,6 @@ namespace IssueTracker.Migrations
                     b.Property<int>("ApplicationId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("AssignedToDeveloperDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("AssignedToTesterDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
@@ -99,15 +96,6 @@ namespace IssueTracker.Migrations
 
                     b.Property<string>("DeveloperId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime?>("FixedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ReadyForTestingDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ReopenedDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Severity")
                         .HasColumnType("nvarchar(max)");
