@@ -66,7 +66,24 @@ namespace IssueTracker.Controllers
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Home");
+                    var user = await _userManager.FindByEmailAsync(model.Email);
+
+                    if (await _userManager.IsInRoleAsync(user, "Admin"))
+                    {
+                        return RedirectToAction("AdminDashboard", "Home");
+                    }
+                    else if (await _userManager.IsInRoleAsync(user, "Developer"))
+                    {
+                        return RedirectToAction("DeveloperDashboard", "Home");
+                    }
+                    else if (await _userManager.IsInRoleAsync(user, "Tester"))
+                    {
+                        return RedirectToAction("TesterDashboard", "Home");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
                 }
                 ModelState.AddModelError(string.Empty, "Incorrect Email or Password");
             }

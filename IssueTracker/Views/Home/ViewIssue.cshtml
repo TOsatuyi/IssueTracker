@@ -1,60 +1,149 @@
 ﻿@model IssueTracker.Models.Issue
 
 @{
-    ViewData["Title"] = "ViewIssue";
+    ViewData["Title"] = "View Issue";
 }
-@* @{ *@
-@*     var userRole = User.IsInRole("Developer") ? "Developer" : User.IsInRole("Tester") ? "Tester" : "None"; *@
-@* } *@
 
+<h1 class="mb-4 text-dark">Issue Details</h1>
 
-<h1>Issue Details</h1>
-
-<div>
-    <strong>Application:</strong> @Model.Application.Name
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h5 class="card-title text-dark">@Model.Application.Name</h5>
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <th class="bg-light">Description</th>
+                    <td>@Model.Description</td>
+                </tr>
+                <tr>
+                    <th class="bg-light">Severity</th>
+                    <td>
+                        <span class="badge
+                            @(Model.Severity == "High" ? "bg-danger" : Model.Severity == "Medium" ? "bg-warning text-dark" : "bg-success")">
+                            @Model.Severity
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="bg-light">Status</th>
+                    <td>
+                        <span class="badge bg-info">@Model.Status</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="bg-light">Created</th>
+                    <td>@Model.Created.ToString("f")</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
-<div>
-    <strong>Description:</strong> @Model.Description
-</div>
-<div>
-    <strong>Severity:</strong> @Model.Severity
-</div>
-<div>
-    <strong>Status:</strong> @Model.Status
-</div>
-<div>
-    <strong>Created:</strong> @Model.Created
-</div>
 
+<h3>Status History</h3>
+<ul>
+    <li><strong>Assigned to Developer:</strong> @Model.AssignedToDeveloperDate?.ToString("f")</li>
+    <li><strong>Ready for Testing:</strong> @Model.ReadyForTestingDate?.ToString("f")</li>
+    <li><strong>Assigned to Tester:</strong> @Model.AssignedToTesterDate?.ToString("f") </li>
+    <li><strong>Fixed:</strong> @Model.FixedDate?.ToString("f")</li>
+    <li><strong>Reopened:</strong> @Model.ReopenedDate?.ToString("f")</li>
+</ul>
 
-
-<h2>Comments</h2>
+<h2 class="mb-3">Comments</h2>
 
 @if (Model.Comments.Any())
 {
-    <ul>
+    <ul class="list-group mb-4">
         @foreach (var comment in Model.Comments)
         {
-            <li>
-                <strong>@comment.User.UserName:</strong> @comment.Text <br />
-                <small>Posted on: @comment.CreatedAt</small>
+            <li class="list-group-item">
+                <strong>@comment.User.UserName:</strong> @comment.Text
+                <br />
+                <small class="text-muted">Posted on: @comment.CreatedAt.ToString("f")</small>
             </li>
         }
     </ul>
 }
 else
 {
-    <p>No comments yet.</p>
+    <p class="text-muted">No comments yet.</p>
 }
+
+
 
 @if (User.Identity.IsAuthenticated)
 {
-    <form method="post" asp-controller="Home" asp-action="AddComment">
-        <input type="hidden" name="issueId" value="@Model.Id" />
-        <textarea name="text" class="form-control" placeholder="Add a comment..." required></textarea>
-        <button type="submit" class="btn btn-primary mt-2">Post Comment</button>
-    </form>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">Add a Comment</h5>
+            <form method="post" asp-controller="Home" asp-action="AddComment">
+                <input type="hidden" name="issueId" value="@Model.Id" />
+                <div class="mb-3">
+                    <textarea name="text" class="form-control" rows="3" placeholder="Write your comment..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Post Comment</button>
+            </form>
+        </div>
+    </div>
 }
+
+
+
+
+@* @model IssueTracker.Models.Issue *@
+
+@* @{ *@
+@*     ViewData["Title"] = "ViewIssue"; *@
+@* } *@
+
+
+
+@* <h1>Issue Details</h1> *@
+
+@* <div> *@
+@*     <strong>Application:</strong> @Model.Application.Name *@
+@* </div> *@
+@* <div> *@
+@*     <strong>Description:</strong> @Model.Description *@
+@* </div> *@
+@* <div> *@
+@*     <strong>Severity:</strong> @Model.Severity *@
+@* </div> *@
+@* <div> *@
+@*     <strong>Status:</strong> @Model.Status *@
+@* </div> *@
+@* <div> *@
+@*     <strong>Created:</strong> @Model.Created *@
+@* </div> *@
+
+
+
+@* <h2>Comments</h2> *@
+
+@* @if (Model.Comments.Any()) *@
+@* { *@
+@*     <ul> *@
+@*         @foreach (var comment in Model.Comments) *@
+@*         { *@
+@*             <li> *@
+@*                 <strong>@comment.User.UserName:</strong> @comment.Text <br /> *@
+@*                 <small>Posted on: @comment.CreatedAt</small> *@
+@*             </li> *@
+@*         } *@
+@*     </ul> *@
+@* } *@
+@* else *@
+@* { *@
+@*     <p>No comments yet.</p> *@
+@* } *@
+
+@* @if (User.Identity.IsAuthenticated) *@
+@* { *@
+@*     <form method="post" asp-controller="Home" asp-action="AddComment"> *@
+@*         <input type="hidden" name="issueId" value="@Model.Id" /> *@
+@*         <textarea name="text" class="form-control" placeholder="Add a comment..." required></textarea> *@
+@*         <button type="submit" class="btn btn-primary mt-2">Post Comment</button> *@
+@*     </form> *@
+@* } *@
 
 
 

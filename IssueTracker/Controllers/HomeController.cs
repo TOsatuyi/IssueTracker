@@ -34,6 +34,7 @@ namespace IssueTracker.Controllers
         {
             var allIssues = _context.Issues
                                     .Include(i=> i.Application)
+                                    .OrderByDescending(i => i.Id)
                                     .ToList();
             return View(allIssues);
         }
@@ -174,6 +175,8 @@ namespace IssueTracker.Controllers
                 return Unauthorized();
             }
 
+
+
             // Validate status updates based on role
             if (User.IsInRole("Developer") && status != "Ready for Testing")
             {
@@ -185,6 +188,24 @@ namespace IssueTracker.Controllers
             {
                 _logger.LogError("Invalid status update: Tester can only mark issues as 'Fixed'.");
                 return BadRequest("Testers can only mark issues as 'Fixed' or 'Reopened'.");
+            }
+
+            if (User.IsInRole("Developer") && status == "Ready for Testing")
+            {
+                issue.ReadyForTestingDate = DateTime.Now;
+            }
+            else if (User.IsInRole("Tester") && status == "Fixed")
+            {
+                issue.FixedDate = DateTime.Now;
+            }
+            else if (User.IsInRole("Tester") && status == "Reopened")
+            {
+                issue.ReopenedDate = DateTime.Now;
+            }
+            else
+            {
+                _logger.LogError("Invalid status update for Issue ID: {IssueId}", id);
+                return BadRequest("Invalid status update.");
             }
 
             // Update the issue status
@@ -212,6 +233,7 @@ namespace IssueTracker.Controllers
                                 .Include(i => i.Application)
                                 .Include(i => i.Developer)
                                 .Include(i => i.Tester)
+                                .OrderByDescending(i => i.Id)
                                 .ToList();
 
             return View(issues);
@@ -340,7 +362,8 @@ namespace IssueTracker.Controllers
             issue.DeveloperId = model.SelectedDeveloperId;
             issue.DeveloperAssigned = true; // Set developer assigned flag to true
             issue.Status = "In Progress";
-                _context.SaveChanges();
+            issue.AssignedToDeveloperDate = DateTime.Now; // Log assignment time
+            _context.SaveChanges();
 
             _logger.LogInformation("Developer assigned successfully to Issue ID: {IssueId}", model.IssueId);
 
@@ -407,6 +430,7 @@ namespace IssueTracker.Controllers
             issue.TesterId = model.SelectedTesterId;
             issue.TesterAssigned = true;
             issue.Status = "Undergoing Tests";
+            issue.AssignedToTesterDate = DateTime.Now;
             await _context.SaveChangesAsync();
 
             _logger.LogInformation("Tester assigned successfully to Issue ID: {IssueId}", model.IssueId);
@@ -439,6 +463,7 @@ namespace IssueTracker.Controllers
             var issues = _context.Issues
                                         .Include(i => i.Application)
                                         .Where(i => i.DeveloperId == developerId)
+                                        .OrderByDescending(i => i.Id)
                                         .ToList();
             return View(issues);
         }
@@ -450,7 +475,8 @@ namespace IssueTracker.Controllers
             var issues = await _context.Issues
                                .Include(i => i.Application)
                                .Include(i => i.Developer)
-                               .Where(i => i.TesterId == testerId && i.Status != "Fixed")
+                               .Where(i => i.TesterId == testerId)
+                               .OrderByDescending(i => i.Id)
                                .ToListAsync();
             return View(issues);
         }
